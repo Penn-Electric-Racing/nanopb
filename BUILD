@@ -1,12 +1,5 @@
-licenses(["notice"])
-
-exports_files(["LICENSE.txt"])
-
-package(default_visibility = ["//visibility:public"])
-
 cc_library(
   name = "nanopb",
-  visibility = ["//visibility:public"],
   hdrs = [
     "pb.h",
     "pb_common.h",
@@ -18,4 +11,18 @@ cc_library(
     "pb_decode.c",
     "pb_encode.c",
   ],
+  visibility = ["//visibility:public"],
+)
+
+py_library(
+    name = "nanopb_generate",
+    srcs = glob(["generator/**/*.py"])
+)
+
+py_binary(
+    name = "nanopb_generate_main",
+    srcs = ["generator/nanopb_generator.py"],
+    main = "generator/nanopb_generator.py",
+    deps = ["@com_google_protobuf//:protobuf_python", ":nanopb_generate"],
+    visibility = ["//visibility:public"],
 )

@@ -1676,6 +1676,11 @@ optparser.add_option("-Q", "--generated-include-format", dest="genformat",
 optparser.add_option("-L", "--library-include-format", dest="libformat",
     metavar="FORMAT", default='#include <%s>\n',
     help="Set format string to use for including the nanopb pb.h header. [default: %default]")
+
+optparser.add_option("-F", "--file-format", dest="fileformat",
+    metavar="FORMAT", default='%s',
+    help="Set format string to use for the file base name. [default: %default]")
+
 optparser.add_option("--strip-path", dest="strip_path", action="store_true", default=False,
     help="Strip directory path from #included .pb.h file name")
 optparser.add_option("--no-strip-path", dest="strip_path", action="store_false",
@@ -1758,7 +1763,8 @@ def process_file(filename, fdesc, options, other_files = {}):
             f.add_dependency(other_files[dep])
 
     # Decide the file names
-    noext = os.path.splitext(filename)[0]
+    noext = options.fileformat % os.path.splitext(filename)[0] \
+                if '%s' in options.fileformat else options.fileformat 
     headername = noext + options.extension + options.header_extension
     sourcename = noext + options.extension + options.source_extension
 
