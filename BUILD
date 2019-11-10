@@ -11,6 +11,7 @@ cc_library(
     "pb_decode.c",
     "pb_encode.c",
   ],
+  includes = ["."],
   visibility = ["//visibility:public"],
 )
 

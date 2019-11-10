@@ -6,6 +6,7 @@ def cc_nanopb_gen_impl_(ctx):
 
     args = ctx.actions.args()
     args.add_all(['-e', '.nanopb', '-F', ctx.attr.gen_base])
+    args.add_all(['--strip-path'])
     args.add_all(['--output-dir', ctx.outputs.gen_src.dirname])
     args.add(proto_library)
     ctx.actions.run(outputs=[ctx.outputs.gen_src, ctx.outputs.gen_hdr],
@@ -29,6 +30,7 @@ cc_nanopb_gen = rule(
 
 # hdr_filename/src_filename can't be predicted!
 def cc_nanopb_library(name, proto_library, base_name,
+                      deps=[], # should be other cc_nanopb_library targets!
                       includes=[], visibility=[]):
     src_filename = base_name + '.nanopb.c'
     hdr_filename = base_name + '.nanopb.h'
@@ -48,5 +50,6 @@ def cc_nanopb_library(name, proto_library, base_name,
         srcs = [src_filename],
         hdrs = [hdr_filename],
         includes = includes,
+        deps = deps + ["@com_github_nanopb_nanopb//:nanopb"],
         visibility=visibility
     )
