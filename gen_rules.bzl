@@ -6,7 +6,7 @@ def cc_nanopb_gen_impl_(ctx):
 
     args = ctx.actions.args()
     args.add_all(['-e', '.nanopb', '-F', ctx.attr.gen_base])
-    args.add_all(['--strip-path'])
+    args.add_all(['--strip-path', '--quiet'])
     args.add_all(['--output-dir', ctx.outputs.gen_src.dirname])
     args.add(proto_library)
     ctx.actions.run(outputs=[ctx.outputs.gen_src, ctx.outputs.gen_hdr],
